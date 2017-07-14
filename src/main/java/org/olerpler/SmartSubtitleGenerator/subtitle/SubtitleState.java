@@ -1,11 +1,11 @@
-package org.olerpler.SmartSubtitleGenerator.sin;
+package org.olerpler.SmartSubtitleGenerator.subtitle;
 
 /**
  * Manages the current state of a sin, whether the sin should be added, 
  * subtracted, or whether it should go unchanged.
  * @author Alexander Porrello
  */
-public enum SinState {
+public enum SubtitleState {
 	
 	ADD(0),
 	SUBTRACT(1),
@@ -13,7 +13,7 @@ public enum SinState {
 	
 	public int state;
 	
-	SinState(int sinState) {
+	SubtitleState(int sinState) {
 		if(sinState >= 0 && sinState <= 2) {
 			this.state = sinState;
 		} else {
@@ -48,7 +48,7 @@ public enum SinState {
 	 * @param sinState is the integer to be matched to a SinState.
 	 * @return the proper SinState.
 	 */
-	public static SinState returnProperEnum(int sinState) {
+	public static SubtitleState returnProperEnum(int sinState) {
 		if(sinState == ADD.state) {
 			return ADD;
 		} else if(sinState == SUBTRACT.state) {

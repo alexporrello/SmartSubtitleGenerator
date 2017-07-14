@@ -1,4 +1,4 @@
-package org.olerpler.SmartSubtitleGenerator.sin;
+package org.olerpler.SmartSubtitleGenerator.subtitle;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Time was created to manage the time for sins.
  * @author Alexander Porrello
  */
-public class SinTime implements Serializable {
+public class SubtitleTime implements Serializable {
 	private static final long serialVersionUID = -1829145722765291049L;
 
 	public int hour;
@@ -46,7 +46,7 @@ public class SinTime implements Serializable {
 	 * @param minute is the given minute.
 	 * @param second is the given second.
 	 */
-	public SinTime(int hour, int minute, int second, int msecond) {
+	public SubtitleTime(int hour, int minute, int second, int msecond) {
 		this.hour    = hour;
 		this.minute  = minute;
 		this.second  = second;
@@ -59,7 +59,7 @@ public class SinTime implements Serializable {
 	 * @param minute is the given minute.
 	 * @param second is the given second.
 	 */
-	public SinTime(String hour, String minute, String second, String msecond) {
+	public SubtitleTime(String hour, String minute, String second, String msecond) {
 		this.hour    = Integer.parseInt(hour);
 		this.minute  = Integer.parseInt(minute);
 		this.second  = Integer.parseInt(second);
@@ -71,7 +71,7 @@ public class SinTime implements Serializable {
 	 * @param minute is the given minute.
 	 * @param second is the given second.
 	 */
-	public SinTime(int minute, int second) {
+	public SubtitleTime(int minute, int second) {
 		this.hour    = 00;
 		this.minute  = minute;
 		this.second  = second;
@@ -82,7 +82,7 @@ public class SinTime implements Serializable {
 	 * For use if one wishes to input a second.
 	 * @param second is the given second.
 	 */
-	public SinTime(int second) {
+	public SubtitleTime(int second) {
 		this.hour    = 00;
 		this.minute  = 00;
 		this.second  = second;
@@ -92,7 +92,7 @@ public class SinTime implements Serializable {
 	/**
 	 * For use if one wishes to simply instantiate a time.
 	 */
-	public SinTime() {
+	public SubtitleTime() {
 		this.hour    = 00;
 		this.minute  = 00;
 		this.second  = 00;
@@ -146,8 +146,8 @@ public class SinTime implements Serializable {
 	@Override
 	public boolean equals(Object o) {
 
-		if(o instanceof SinTime) {
-			SinTime t = (SinTime) o;
+		if(o instanceof SubtitleTime) {
+			SubtitleTime t = (SubtitleTime) o;
 
 			return(hour == t.hour &&
 					minute  == t.minute &&

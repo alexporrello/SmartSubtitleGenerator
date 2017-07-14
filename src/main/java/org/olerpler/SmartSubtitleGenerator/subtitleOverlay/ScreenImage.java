@@ -1,4 +1,4 @@
-package org.olerpler.SmartSubtitleGenerator.subtitle;
+package org.olerpler.SmartSubtitleGenerator.subtitleOverlay;
 
 import java.awt.AWTException;
 import java.awt.Component;

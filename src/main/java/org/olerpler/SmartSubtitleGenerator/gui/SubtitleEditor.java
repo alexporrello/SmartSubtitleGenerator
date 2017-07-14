@@ -17,9 +17,9 @@ import javax.swing.JMenuItem;
 import layout.GBC;
 
 import org.olerpler.SmartSubtitleGenerator.UndoTextArea;
-import org.olerpler.SmartSubtitleGenerator.sin.BonusSin;
-import org.olerpler.SmartSubtitleGenerator.sin.Sin;
-import org.olerpler.SmartSubtitleGenerator.sin.SinTime;
+import org.olerpler.SmartSubtitleGenerator.subtitle.BonusSubtitle;
+import org.olerpler.SmartSubtitleGenerator.subtitle.Subtitle;
+import org.olerpler.SmartSubtitleGenerator.subtitle.SubtitleTime;
 
 import text.FormLabel;
 import text.JMLabel;
@@ -32,7 +32,7 @@ import displays.JMPanel;
 import displays.JMUtils;
 import displays.RoundedPanel;
 
-public class SinEditor extends RoundedPanel {
+public class SubtitleEditor extends RoundedPanel {
 	private static final long serialVersionUID = 4547753120886416521L;
 
 	public String contributor = "";
@@ -51,21 +51,21 @@ public class SinEditor extends RoundedPanel {
 
 	private JMDivider div_b = new JMDivider();
 
-	public SinStateButton state;
+	public SubtitleStateButton state;
 
-	public SinEditorButton export = new SinEditorButton(FancyIcon.NEXT);
+	public SubtitleEditorButton export = new SubtitleEditorButton(FancyIcon.NEXT);
 
-	public SinEditorButton delete = new SinEditorButton(FancyIcon.DELETE);
+	public SubtitleEditorButton delete = new SubtitleEditorButton(FancyIcon.DELETE);
 
 	public Boolean bonusSin;
 
 	public Double key;
 
-	public SinEditor(Sin s) {
+	public SubtitleEditor(Subtitle s) {
 		number  = new JMLabel(s.number + "");
 
 		text    = new UndoTextArea(s.text, s.key);
-		state   = new SinStateButton(s.state);
+		state   = new SubtitleStateButton(s.state);
 		time    = new TimeGUI(s.time.hour, s.time.minute, s.time.second, s.time.msecond);
 		key         = s.key;
 		contributor = s.contributor;
@@ -96,7 +96,7 @@ public class SinEditor extends RoundedPanel {
 		paintBorderOnFocus();
 		setDisplaySize(15);
 
-		if(s instanceof BonusSin) {
+		if(s instanceof BonusSubtitle) {
 			bonusSin = true;
 		} else {
 			bonusSin = false;
@@ -336,14 +336,14 @@ public class SinEditor extends RoundedPanel {
 	/**
 	 * If any component is clicked or focused, component's border is painted.
 	 */
-	public void setTheme(SinEditorTheme theme) {
+	public void setTheme(SubtitleEditorTheme theme) {
 		JComponent[] components = {time.hours, time.colonA, 
 				time.minutes, time.colonB, time.seconds,
 				div_a, text, div_b, state, export, delete};
 
 
 
-		if(theme.equals(SinEditorTheme.DARK)) {
+		if(theme.equals(SubtitleEditorTheme.DARK)) {
 			foreground = JMColor.WHITE;
 
 			text.setForeground(JMColor.WHITE);
@@ -400,8 +400,8 @@ public class SinEditor extends RoundedPanel {
 	 * Fetches information from all the fields.
 	 * @return a sin obtained from all input.
 	 */
-	public Sin getSin() {
-		return new Sin(text.key, Integer.parseInt(number.getText()), 
+	public Subtitle getSin() {
+		return new Subtitle(text.key, Integer.parseInt(number.getText()), 
 				time.getSinTime(), text.getText(),
 				contributor, state.state());
 	}
@@ -476,7 +476,7 @@ public class SinEditor extends RoundedPanel {
 		return time.seconds.field;
 	}
 
-	public SinTime getTime() {
+	public SubtitleTime getTime() {
 		return time.getTime();
 	}
 	
@@ -494,9 +494,9 @@ public class SinEditor extends RoundedPanel {
 		public int mSecond = 0;
 
 		TimeGUI(int hour, int minute, int second, int mSecond) {
-			hours   = new FormLabel(SinTime.twoDigits(hour), 23, 23);
-			minutes = new FormLabel(SinTime.twoDigits(minute), 23, 23);
-			seconds = new FormLabel(SinTime.twoDigits(second), 23, 23);
+			hours   = new FormLabel(SubtitleTime.twoDigits(hour), 23, 23);
+			minutes = new FormLabel(SubtitleTime.twoDigits(minute), 23, 23);
+			seconds = new FormLabel(SubtitleTime.twoDigits(second), 23, 23);
 			
 			this.mSecond = mSecond;
 
@@ -516,11 +516,11 @@ public class SinEditor extends RoundedPanel {
 			setUpFormLabel(seconds);
 		}
 
-		public SinTime getTime() {
-			return new SinTime(SinTime.twoDigits(hours.getText()), 
-					SinTime.twoDigits(minutes.getText()),
-					SinTime.twoDigits(seconds.getText()),
-					SinTime.twoDigits(mSecond));
+		public SubtitleTime getTime() {
+			return new SubtitleTime(SubtitleTime.twoDigits(hours.getText()), 
+					SubtitleTime.twoDigits(minutes.getText()),
+					SubtitleTime.twoDigits(seconds.getText()),
+					SubtitleTime.twoDigits(mSecond));
 		}
 
 		public void setVisible(Boolean visible) {
@@ -531,8 +531,8 @@ public class SinEditor extends RoundedPanel {
 			colonB.setVisible(visible);
 		}
 
-		public SinTime getSinTime() {
-			return new SinTime(hours.getText(), 
+		public SubtitleTime getSinTime() {
+			return new SubtitleTime(hours.getText(), 
 					minutes.getText(),
 					seconds.getText(),
 					mSecond + "");

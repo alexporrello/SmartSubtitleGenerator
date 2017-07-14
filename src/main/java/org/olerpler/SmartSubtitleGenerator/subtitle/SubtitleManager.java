@@ -1,4 +1,4 @@
-package org.olerpler.SmartSubtitleGenerator.sin;
+package org.olerpler.SmartSubtitleGenerator.subtitle;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
  * A glorified ArrayList that doubles as a sin manger.
  * @author Alexander Porrello
  */
-public class SinManager extends ArrayList<Sin> implements Serializable {
+public class SubtitleManager extends ArrayList<Subtitle> implements Serializable {
 	private static final long serialVersionUID = -1120726220040629802L;
 
 	/** This is the url of the .gse file **/
@@ -31,10 +31,10 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 	 * Manages sin files.
 	 * @param url is the url from which files will be loaded.
 	 */
-	public SinManager(String url) {
+	public SubtitleManager(String url) {
 		this.url  = url;
 
-		add(new Sin(0.0, 0, new SinTime(88,88,88, 88), "", "", SinState.ADD));
+		add(new Subtitle(0.0, 0, new SubtitleTime(88,88,88, 88), "", "", SubtitleState.ADD));
 
 		readSinsFromFile();
 	}
@@ -44,8 +44,8 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 	 * @param key is the key of the sin to be found.
 	 * @return the sin that belongs to the key.
 	 */
-	public Sin get(Double key) {
-		for(Sin s : this) {
+	public Subtitle get(Double key) {
+		for(Subtitle s : this) {
 			if(s.key.equals(key)) {
 				return s;
 			}
@@ -54,8 +54,8 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 		throw new NoSuchElementException();
 	}
 
-	public Sin getNextSin(Double key) {
-		for(Sin s : this) {
+	public Subtitle getNextSin(Double key) {
+		for(Subtitle s : this) {
 			if(s.key.equals(key)) {
 				if(indexOf(s.key)+1 <= size()) {
 					return get(indexOf(s.key)+1);
@@ -67,7 +67,7 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 	}
 	
 	public int indexOf(Object o) {
-		if(o instanceof Integer || o instanceof Sin) {
+		if(o instanceof Integer || o instanceof Subtitle) {
 			return super.indexOf(o);
 		} else if(o instanceof Double) {
 			return super.indexOf(get((Double) o));
@@ -78,8 +78,8 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 
 	@Override
 	public boolean contains(Object o) {
-		if(o instanceof Sin) {
-			return containsKey(((Sin) o).key);
+		if(o instanceof Subtitle) {
+			return containsKey(((Subtitle) o).key);
 		} else if(o instanceof Double) {			
 			return containsKey((Double) o);
 		}
@@ -93,7 +93,7 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 	 * @return true if it is contained; else, false.
 	 */
 	private boolean containsKey(Double key) {
-		for(Sin s : this) {
+		for(Subtitle s : this) {
 			if(s.key == key) {
 				return true;
 			}
@@ -106,7 +106,7 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 	 * Adds a sin and then sorts and numbers it.
 	 */
 	@Override
-	public boolean add(Sin sin) {
+	public boolean add(Subtitle sin) {
 		super.add(sin);
 
 		sort();
@@ -120,7 +120,7 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 	 */
 	@Override
 	public boolean remove(Object o) {
-		if(o instanceof Sin) {
+		if(o instanceof Subtitle) {
 			super.remove(o);
 
 			reNumber();
@@ -142,8 +142,8 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 	 * @param sin is the updated version of the sin.
 	 * @return true if the sin was updated.
 	 */
-	public Boolean updateSin(Sin sin) {
-		for(Sin s : this) {
+	public Boolean updateSin(Subtitle sin) {
+		for(Subtitle s : this) {
 			if(s.key == sin.key) {
 				this.remove(s);
 				this.add(sin);
@@ -164,13 +164,13 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 		int sinNumber  = startingNumber;
 		//int multiplier = 0;
 
-		for(Sin s : this) {
+		for(Subtitle s : this) {
 			if(s.visible) {
 				s.number = sinNumber;
 
-				if(s.state == SinState.ADD) {
+				if(s.state == SubtitleState.ADD) {
 					sinNumber++;
-				} else if(s.state == SinState.SUBTRACT) {
+				} else if(s.state == SubtitleState.SUBTRACT) {
 					sinNumber--;
 				}
 			}
@@ -196,15 +196,15 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 
 				while ((thisLine = br.readLine()) != null) {
 					if(thisLine.startsWith("<sin>")) {
-						Sin toPut = new Sin(thisLine);
+						Subtitle toPut = new Subtitle(thisLine);
 
-						if(toPut.key != Sin.PLACEHOLDER_KEY) {
+						if(toPut.key != Subtitle.PLACEHOLDER_KEY) {
 							add(toPut);
 						}
 					} else if(thisLine.startsWith("<bsin>")) {
-						BonusSin toPut = new BonusSin(thisLine);
+						BonusSubtitle toPut = new BonusSubtitle(thisLine);
 
-						if(toPut.key != Sin.PLACEHOLDER_KEY) {
+						if(toPut.key != Subtitle.PLACEHOLDER_KEY) {
 							add(toPut);
 						}
 					} else if(thisLine.startsWith("<ssn>")) {
@@ -241,7 +241,7 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 
 			String toWrite = "";
 
-			for(Sin s : this) {
+			for(Subtitle s : this) {
 				toWrite = s.toString() + "\n" + toWrite;
 			}
 
@@ -268,9 +268,9 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 		//TODO make this work.
 		Boolean flag = false;
 
-		SinManager savedFile = new SinManager(url);
+		SubtitleManager savedFile = new SubtitleManager(url);
 
-		for(Sin s : this) {
+		for(Subtitle s : this) {
 			if(savedFile.contains(s)) {
 				if(!savedFile.get(s.key).equals(s)) {
 					System.out.println(true + " 3");
@@ -291,10 +291,10 @@ public class SinManager extends ArrayList<Sin> implements Serializable {
 	 * @param s is the search keyword.
 	 * @return is an ArrayList of all the sins that matched the query.
 	 */
-	public ArrayList<Sin> find(String s) {
-		ArrayList<Sin> toReturn = new ArrayList<Sin>();
+	public ArrayList<Subtitle> find(String s) {
+		ArrayList<Subtitle> toReturn = new ArrayList<Subtitle>();
 
-		for(Sin thisSin : this) {
+		for(Subtitle thisSin : this) {
 			if(thisSin.text.contains(s)) {
 				toReturn.add(thisSin);
 			}

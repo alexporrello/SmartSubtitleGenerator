@@ -15,9 +15,9 @@ import javax.swing.JComponent;
 import layout.GBC;
 
 import org.olerpler.SmartSubtitleGenerator.UndoTextArea;
-import org.olerpler.SmartSubtitleGenerator.sin.Sin;
-import org.olerpler.SmartSubtitleGenerator.sin.SinState;
-import org.olerpler.SmartSubtitleGenerator.sin.SinTime;
+import org.olerpler.SmartSubtitleGenerator.subtitle.Subtitle;
+import org.olerpler.SmartSubtitleGenerator.subtitle.SubtitleState;
+import org.olerpler.SmartSubtitleGenerator.subtitle.SubtitleTime;
 
 import text.JMLabel;
 import text.JMTextField;
@@ -27,7 +27,7 @@ import colors.JMColor;
 import displays.JMDivider;
 import displays.RoundedPanel;
 
-public class SinContributor extends RoundedPanel {
+public class SubtitleContributor extends RoundedPanel {
 	private static final long serialVersionUID = 1622970777711975521L;
 
 	private JMTextField hours   = new JMTextField("00");
@@ -40,18 +40,18 @@ public class SinContributor extends RoundedPanel {
 	private JMDivider div_a = new JMDivider();
 	private JMDivider div_b = new JMDivider();
 
-	public UndoTextArea   text  = new UndoTextArea("", Sin.generateKey());
-	public SinStateButton state = new SinStateButton(SinState.ADD);
+	public UndoTextArea   text  = new UndoTextArea("", Subtitle.generateKey());
+	public SubtitleStateButton state = new SubtitleStateButton(SubtitleState.ADD);
 
 	private PremiereTime premiereTime = new PremiereTime(text);
 
 	public Boolean pasteFromPremiere = true;
 	public String  contributor       = "GamingSins";
 
-	public SinEditorButton add   = new SinEditorButton(FancyIcon.NEXT);
-	public SinEditorButton clear = new SinEditorButton(FancyIcon.DELETE);
+	public SubtitleEditorButton add   = new SubtitleEditorButton(FancyIcon.NEXT);
+	public SubtitleEditorButton clear = new SubtitleEditorButton(FancyIcon.DELETE);
 
-	public SinContributor(Boolean pasteFromPremiere) {
+	public SubtitleContributor(Boolean pasteFromPremiere) {
 		background = Variables.BACKGROUND;
 		foreground = Variables.FOREGROUND;
 		arcWidth   = 2;
@@ -216,8 +216,8 @@ public class SinContributor extends RoundedPanel {
 				((JMDivider) c).addMouseClickedListener(e -> text.requestFocus());
 			}
 
-			if(c instanceof SinEditorButton) {
-				((SinEditorButton) c).addActionListener(e -> {
+			if(c instanceof SubtitleEditorButton) {
+				((SubtitleEditorButton) c).addActionListener(e -> {
 					text.requestFocus();
 				});
 			}
@@ -236,7 +236,7 @@ public class SinContributor extends RoundedPanel {
 
 		text.setText("");
 
-		state.setState(SinState.ADD);
+		state.setState(SubtitleState.ADD);
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class SinContributor extends RoundedPanel {
 	 * Fetches information from all the fields.
 	 * @return a sin obtained from all input.
 	 */
-	public Sin getSin() {
+	public Subtitle getSin() {
 
 		int hours    = 0;
 		int minutes  = 0;
@@ -277,25 +277,25 @@ public class SinContributor extends RoundedPanel {
 		int mseconds = 0;
 
 		if(pasteFromPremiere) {
-			hours    = Integer.parseInt(SinTime.twoDigits(
+			hours    = Integer.parseInt(SubtitleTime.twoDigits(
 					premiereTime.hours.getText()));
-			minutes  = Integer.parseInt(SinTime.twoDigits(
+			minutes  = Integer.parseInt(SubtitleTime.twoDigits(
 					premiereTime.minutes.getText()));
-			seconds  = Integer.parseInt(SinTime.twoDigits(
+			seconds  = Integer.parseInt(SubtitleTime.twoDigits(
 					premiereTime.seconds.getText()));
-			mseconds = Integer.parseInt(SinTime.twoDigits(
+			mseconds = Integer.parseInt(SubtitleTime.twoDigits(
 					premiereTime.mSeconds.getText()));
 		} else {
-			hours = Integer.parseInt(SinTime.twoDigits(
+			hours = Integer.parseInt(SubtitleTime.twoDigits(
 					Integer.parseInt(this.hours.getText())));
-			minutes = Integer.parseInt(SinTime.twoDigits(
+			minutes = Integer.parseInt(SubtitleTime.twoDigits(
 					Integer.parseInt(this.minutes.getText())));
-			seconds = Integer.parseInt(SinTime.twoDigits(
+			seconds = Integer.parseInt(SubtitleTime.twoDigits(
 					Integer.parseInt(this.seconds.getText())));
 		}
 
-		Sin toReturn = new Sin(Sin.generateKey(), 0, 
-				new SinTime(hours, minutes, seconds, mseconds), 
+		Subtitle toReturn = new Subtitle(Subtitle.generateKey(), 0, 
+				new SubtitleTime(hours, minutes, seconds, mseconds), 
 				text.getText(), contributor, state.state());
 
 		reset();

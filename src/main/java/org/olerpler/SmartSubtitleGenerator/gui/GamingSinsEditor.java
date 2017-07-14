@@ -14,8 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
-import org.olerpler.SmartSubtitleGenerator.sin.Sin;
-import org.olerpler.SmartSubtitleGenerator.sin.SinTime;
+import org.olerpler.SmartSubtitleGenerator.subtitle.Subtitle;
+import org.olerpler.SmartSubtitleGenerator.subtitle.SubtitleTime;
 
 import tabs.JMTab;
 import tabs.JMTabPane;
@@ -63,7 +63,7 @@ public class GamingSinsEditor extends JMFrame {
 				Boolean modifiedCheck = false;
 
 				for(JMTab tab : tabs.getTabArray()) {
-					SinEditorPanel current = (SinEditorPanel) tab.content;
+					SubtitleEditorPanel current = (SubtitleEditorPanel) tab.content;
 
 					if(current.modified()) {
 						modifiedCheck = true;
@@ -142,9 +142,9 @@ public class GamingSinsEditor extends JMFrame {
 	/**
 	 * @return The project that is currently in view.
 	 */
-	private SinEditorPanel getProjectInView() {	
+	private SubtitleEditorPanel getProjectInView() {	
 		if(tabs.selectedComponent() != null) {
-			return ((SinEditorPanel) tabs.selectedComponent());
+			return ((SubtitleEditorPanel) tabs.selectedComponent());
 		} else {
 			throw new NoSuchElementException();
 		}
@@ -160,7 +160,7 @@ public class GamingSinsEditor extends JMFrame {
 				"Yes", "No",
 				y -> {				
 					for(JMTab tab : tabs.getTabArray()) {
-						SinEditorPanel current = (SinEditorPanel) tab.content;
+						SubtitleEditorPanel current = (SubtitleEditorPanel) tab.content;
 						current.save();
 					}
 
@@ -181,14 +181,14 @@ public class GamingSinsEditor extends JMFrame {
 	 * @param url the file-to-be-loaded's URL
 	 */
 	public void loadFile(String url) {
-		SinEditorPanel seb = new SinEditorPanel(new JMPanel(), url, 
+		SubtitleEditorPanel seb = new SubtitleEditorPanel(new JMPanel(), url, 
 				prefs.interfaceSize, prefs.overlayOpacity, prefs.premeireTime);
 
 		String name = new File(url).getName();
 
 		tabs.addTab(name, seb, e -> {
 			JMDialog dialog = new JMDialog("GamingSins Editor", 
-					"Would you like save changes to '" + ((SinEditorPanel) 
+					"Would you like save changes to '" + ((SubtitleEditorPanel) 
 							tabs.selectedComponent()).getProjectName() + 
 							"' before closing?", "Yes", "No", 
 							f -> {
@@ -307,8 +307,8 @@ public class GamingSinsEditor extends JMFrame {
 	/** Adds a new Bonus Sin to the project currently in view. **/
 	public void addNewBonusSin() {
 		try {
-			Sin toAdd = new Sin();
-			toAdd.time = new SinTime(77, 77, 77, 77);
+			Subtitle toAdd = new Subtitle();
+			toAdd.time = new SubtitleTime(77, 77, 77, 77);
 
 			getProjectInView().addNewSin(toAdd, true);
 			getProjectInView().scrollToSinEditor(toAdd.key);

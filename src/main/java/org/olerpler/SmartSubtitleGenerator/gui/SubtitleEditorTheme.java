@@ -1,5 +1,5 @@
 package org.olerpler.SmartSubtitleGenerator.gui;
 
-public enum SinEditorTheme {
+public enum SubtitleEditorTheme {
 	DARK, LIGHT;
 }

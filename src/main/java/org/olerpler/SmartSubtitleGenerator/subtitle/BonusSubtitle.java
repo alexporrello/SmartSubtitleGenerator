@@ -1,29 +1,29 @@
-package org.olerpler.SmartSubtitleGenerator.sin;
+package org.olerpler.SmartSubtitleGenerator.subtitle;
 
-public class BonusSin extends Sin {
+public class BonusSubtitle extends Subtitle {
 	private static final long serialVersionUID = -2228987137101974024L;
 	
 	/** The multiplier used for a BonusSin **/
 	public String multiplier;
 	
-	public BonusSin() {
+	public BonusSubtitle() {
 		this.contributor = "GamingSins";
-		this.key         = Sin.generateKey();
-		this.state       = SinState.ADD;
+		this.key         = Subtitle.generateKey();
+		this.state       = SubtitleState.ADD;
 		this.text        = "Bonus Sin";
-		this.time        = new SinTime(99, 99, 99, 99);
+		this.time        = new SubtitleTime(99, 99, 99, 99);
 	}
 	
-	public BonusSin(String s) {
+	public BonusSubtitle(String s) {
 		this.parseSinString(s);
 	}
 	
 	@Override
 	public void parseSinString(String bonusSinString) {
 		if(bonusSinString.startsWith("<bsin>") && bonusSinString.endsWith("</bsin>")) {			
-			this.key   = Sin.generateKey();
-			this.time  = new SinTime(99, 99, 99, 99);
-			this.state = SinState.ADD;
+			this.key   = Subtitle.generateKey();
+			this.time  = new SubtitleTime(99, 99, 99, 99);
+			this.state = SubtitleState.ADD;
 			this.text  = "Bonus Sin.";
 			this.contributor = "GamingSins";
 			this.number = Integer.parseInt((String) bonusSinString.subSequence(bonusSinString.indexOf("<n>") + 3, bonusSinString.indexOf("</n>")));

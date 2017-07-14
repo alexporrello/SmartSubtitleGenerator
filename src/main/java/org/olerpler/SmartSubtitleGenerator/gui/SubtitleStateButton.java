@@ -6,16 +6,16 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
-import org.olerpler.SmartSubtitleGenerator.sin.SinState;
+import org.olerpler.SmartSubtitleGenerator.subtitle.SubtitleState;
 
-public class SinStateButton extends SinEditorButton {
+public class SubtitleStateButton extends SubtitleEditorButton {
 	private static final long serialVersionUID = 8053269937583104140L;
 
 	private ImageIcon[] icons = {FancyIcon.ADD, FancyIcon.SUBTRACT, FancyIcon.NOTHING};
 
 	private int selected = 0;
 	
-	public SinStateButton(SinState sinState) {
+	public SubtitleStateButton(SubtitleState sinState) {
 		super(FancyIcon.ADD);
 		
 		setState(sinState);
@@ -29,7 +29,7 @@ public class SinStateButton extends SinEditorButton {
 		});
 	}
 	
-	public void setState(SinState state) {
+	public void setState(SubtitleState state) {
 		selected = state.state;
 		setIcon(icons[selected]);
 	}
@@ -44,13 +44,13 @@ public class SinStateButton extends SinEditorButton {
 		setIcon(icons[selected]);
 	}
 	
-	public SinState state() {		
+	public SubtitleState state() {		
 		if(selected == 0) {
-			return SinState.ADD;
+			return SubtitleState.ADD;
 		} else if(selected == 1) {
-			return SinState.SUBTRACT;
+			return SubtitleState.SUBTRACT;
 		} else {
-			return SinState.DO_NOTHING;
+			return SubtitleState.DO_NOTHING;
 		}
 	}
 }

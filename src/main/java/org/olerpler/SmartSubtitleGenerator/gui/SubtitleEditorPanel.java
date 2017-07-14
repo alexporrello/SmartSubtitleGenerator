@@ -18,34 +18,34 @@ import layout.GBC;
 
 import org.olerpler.SmartSubtitleGenerator.UndoTextArea;
 import org.olerpler.SmartSubtitleGenerator.gui.UndoTimeString.UndoTime;
-import org.olerpler.SmartSubtitleGenerator.sin.BonusSin;
-import org.olerpler.SmartSubtitleGenerator.sin.Sin;
-import org.olerpler.SmartSubtitleGenerator.sin.SinManager;
-import org.olerpler.SmartSubtitleGenerator.subtitle.SubtitleExporter;
+import org.olerpler.SmartSubtitleGenerator.subtitle.BonusSubtitle;
+import org.olerpler.SmartSubtitleGenerator.subtitle.Subtitle;
+import org.olerpler.SmartSubtitleGenerator.subtitle.SubtitleManager;
+import org.olerpler.SmartSubtitleGenerator.subtitleOverlay.SubtitleOverlayExporter;
 
 import word.WordList;
 import displays.JMPanel;
 import displays.JMScrollPane;
 
-public class SinEditorPanel extends JMPanel {
+public class SubtitleEditorPanel extends JMPanel {
 	private static final long serialVersionUID = -1604052028678375849L;
 
 	/** Contains all of the sins **/
-	private SinManager sins;
+	private SubtitleManager sins;
 
 	/** For spell-checks in the text editing files **/
 	private WordList wordlist = new WordList();
 
 	/** All of the sins as they are displayed to the user **/
-	private HashMap<Double, SinEditor> sinEditors = new HashMap<Double, SinEditor>();
+	private HashMap<Double, SubtitleEditor> sinEditors = new HashMap<Double, SubtitleEditor>();
 
 	/** The panel upon which all of the SinEditors are displayed **/
 	private JMPanel content;
 
 	/** This is the object by which a user enters a sin **/
-	public SinContributor sinContributor;
+	public SubtitleContributor sinContributor;
 
-	/** The opacity for the overlays, for use in {@link #addNewSin(Sin, boolean)} **/
+	/** The opacity for the overlays, for use in {@link #addNewSin(Subtitle, boolean)} **/
 	public float overlayOpacity;
 
 	/** The size of the interface: large, medium, or small **/
@@ -58,12 +58,12 @@ public class SinEditorPanel extends JMPanel {
 	public boolean searchMode = false;
 	
 	/** The array in which results are stored when the user searches **/
-	private ArrayList<Sin> searchResultArray = new ArrayList<Sin>();
+	private ArrayList<Subtitle> searchResultArray = new ArrayList<Subtitle>();
 	
 	/** The panel responsible for displaying all of the sins **/
 	EditorPanel editorPanel;
 
-	public SinEditorPanel(JMPanel panel, String fileURL, int interfaceSize, float overlayOpacity, Boolean premiereTime) {
+	public SubtitleEditorPanel(JMPanel panel, String fileURL, int interfaceSize, float overlayOpacity, Boolean premiereTime) {
 		editorPanel = new EditorPanel(panel, fileURL, interfaceSize, premiereTime);
 
 		this.overlayOpacity = overlayOpacity;
@@ -78,8 +78,8 @@ public class SinEditorPanel extends JMPanel {
 	 * Adds a new sin to {@link #sinEditors}.
 	 * @param s the sin to be added
 	 */
-	public void addNewSin(Sin s, boolean addedLater) {
-		SinEditor toAdd = new SinEditor(s);
+	public void addNewSin(Subtitle s, boolean addedLater) {
+		SubtitleEditor toAdd = new SubtitleEditor(s);
 
 		toAdd.enableSpellCheck(wordlist);
 
@@ -139,7 +139,7 @@ public class SinEditorPanel extends JMPanel {
 
 		toAdd.setDisplaySize(interfaceSize);
 
-		if(s.key == Sin.PLACEHOLDER_KEY) {
+		if(s.key == Subtitle.PLACEHOLDER_KEY) {
 			toAdd.setGUIVisible(false);
 		}
 
@@ -166,7 +166,7 @@ public class SinEditorPanel extends JMPanel {
 
 		searchResultArray.clear();
 		
-		for(Sin s : sins) {
+		for(Subtitle s : sins) {
 			if(sinEditors.get(s.key).search(query)) {
 				searchResultArray.add(s);
 				numMatches++;
@@ -193,9 +193,9 @@ public class SinEditorPanel extends JMPanel {
 	 * Updates {@link #sins} to match the user's input.
 	 */
 	public void updateSinsFromGUI() {
-		ArrayList<Sin> toRemove = new ArrayList<Sin>();
+		ArrayList<Subtitle> toRemove = new ArrayList<Subtitle>();
 
-		for(Sin s : sins) {
+		for(Subtitle s : sins) {
 			if(sinEditors.containsKey(s.key)) {
 				if(!sinEditors.get(s.key).getSin().equals(s)) {
 					s.update(sinEditors.get(s.key).getSin());
@@ -205,7 +205,7 @@ public class SinEditorPanel extends JMPanel {
 			}
 		}
 
-		for(Sin s : toRemove) {
+		for(Subtitle s : toRemove) {
 			sins.remove(s);
 		}
 	}
@@ -230,7 +230,7 @@ public class SinEditorPanel extends JMPanel {
 
 		sinContributor.setInterfaceSize(fontSize);
 
-		for(Sin s : sins) {
+		for(Subtitle s : sins) {
 			if(sinEditors.containsKey(s.key)) {
 				sinEditors.get(s.key).setDisplaySize(fontSize);
 			}
@@ -253,7 +253,7 @@ public class SinEditorPanel extends JMPanel {
 	 * @return true if modified; else, false.
 	 */
 	public boolean modified() {		
-		SinManager tempSM = new SinManager(sins.url);
+		SubtitleManager tempSM = new SubtitleManager(sins.url);
 
 		if(sinEditors.size() == tempSM.size()) {
 			for(Double key : sinEditors.keySet()) {				
@@ -278,13 +278,13 @@ public class SinEditorPanel extends JMPanel {
 		int i = 0;
 
 		if(searchMode) {
-			for(Sin s : searchResultArray) {
+			for(Subtitle s : searchResultArray) {
 				addSinToGUI(s, i, y);
 				i++;
 				y++;
 			}
 		} else {
-			for(Sin s : sins) {
+			for(Subtitle s : sins) {
 				addSinToGUI(s, i, y);
 				i++;
 				y++;
@@ -295,7 +295,7 @@ public class SinEditorPanel extends JMPanel {
 		repaint();
 	}
 
-	private void addSinToGUI(Sin s, int i, int y) {
+	private void addSinToGUI(Subtitle s, int i, int y) {
 		if(sinEditors.containsKey(s.key)) {
 			int a = -1 * sinEditors.get(s.key).borderWidth;
 
@@ -328,16 +328,16 @@ public class SinEditorPanel extends JMPanel {
 	 * Exports a single sin's overlay.
 	 * @param se the single sin to be exported
 	 */
-	public void exportSingleSinOverlay(SinEditor se) {
+	public void exportSingleSinOverlay(SubtitleEditor se) {
 		String exportPath = editorPanel.selectSubtitleExportPath();
 
 		if(!exportPath.equals("")) {
-			Sin    s    = se.getSin();
+			Subtitle    s    = se.getSin();
 			String time = exportPath + "\\" + editorPanel.make2Digit(s.time.hour) + "-" + 
 					editorPanel.make2Digit(s.time.minute) + "-" + editorPanel.make2Digit(s.time.second);
 
-			new SubtitleExporter(" "   , s.number, true,  time, sinsEditor);
-			new SubtitleExporter(s.text, s.number, false, time, sinsEditor);
+			new SubtitleOverlayExporter(" "   , s.number, true,  time, sinsEditor);
+			new SubtitleOverlayExporter(s.text, s.number, false, time, sinsEditor);
 		}
 	}
 
@@ -352,15 +352,15 @@ public class SinEditorPanel extends JMPanel {
 
 			String destination = new File(exportPath).getAbsolutePath();
 
-			for(Sin s : sins) {
+			for(Subtitle s : sins) {
 				String time = destination + "\\" + editorPanel.make2Digit(s.time.hour) + "-" + 
 						editorPanel.make2Digit(s.time.minute) + "-" + editorPanel.make2Digit(s.time.second);
 
-				if(s instanceof BonusSin) {
-					new SubtitleExporter(s.text, s.number, true, time + BonusSinNumber++ + ".png", sinsEditor);
+				if(s instanceof BonusSubtitle) {
+					new SubtitleOverlayExporter(s.text, s.number, true, time + BonusSinNumber++ + ".png", sinsEditor);
 				} else {
-					new SubtitleExporter(" "   , s.number, true,  time, sinsEditor);
-					new SubtitleExporter(s.text, s.number, false, time, sinsEditor);
+					new SubtitleOverlayExporter(" "   , s.number, true,  time, sinsEditor);
+					new SubtitleOverlayExporter(s.text, s.number, false, time, sinsEditor);
 				}
 
 				try {
@@ -399,7 +399,7 @@ public class SinEditorPanel extends JMPanel {
 	 * @param key is the key of the SinEditor to be returned.
 	 * @return the sin editor.
 	 */
-	public SinEditor getSinEditor(Double key) {
+	public SubtitleEditor getSinEditor(Double key) {
 		if(sinEditors.containsKey(key)) {
 			return sinEditors.get(key);
 		} else {
@@ -429,7 +429,7 @@ public class SinEditorPanel extends JMPanel {
 
 			setScrollBarWidth(15);
 
-			sins = new SinManager(fileURL);
+			sins = new SubtitleManager(fileURL);
 
 			content = panel;
 			content.setLayout(new GridBagLayout());
@@ -447,7 +447,7 @@ public class SinEditorPanel extends JMPanel {
 		private void loadSinsIntoGUI() {
 			sinEditors.clear();	
 
-			for(Sin s : sins) {			
+			for(Subtitle s : sins) {			
 				addNewSin(s, false);
 			}
 
@@ -459,32 +459,32 @@ public class SinEditorPanel extends JMPanel {
 		 * @param premiereTime true if the user is to paste time from Premiere.
 		 */
 		private void createSinContributor(Boolean premiereTime) {
-			sinContributor = new SinContributor(premiereTime);
+			sinContributor = new SubtitleContributor(premiereTime);
 
 			sinContributor.text.enableSpellCheck(wordlist);
 			sinContributor.text.addKeyPressListener(e -> {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					e.consume();
-					Sin sin = sinContributor.getSin();
+					Subtitle sin = sinContributor.getSin();
 					addNewSin(sin, true);
 				}
 			});
 
 			sinContributor.add.addActionListener(e -> {
-				Sin sin = sinContributor.getSin();
+				Subtitle sin = sinContributor.getSin();
 				addNewSin(sin, true);
 			});
 		}
 
 		private void updateDisplayNumbers() {
-			for(Sin s2 : sins) {
+			for(Subtitle s2 : sins) {
 				if(sinEditors.containsKey(s2.key)) {
 					sinEditors.get(s2.key).setNumber(s2.number);
 				}
 			}
 		}
 
-		private void updateTimeAction(SinEditor toAdd) {
+		private void updateTimeAction(SubtitleEditor toAdd) {
 			sins.get(toAdd.key).time = toAdd.getTime();
 			updateSinState(toAdd);
 
@@ -498,7 +498,7 @@ public class SinEditorPanel extends JMPanel {
 		 * Updates the state of a given SinEditor and renumbers accordingly.
 		 * @param toAdd the SinEditor whose sin is to be updated
 		 */
-		private void updateSinState(SinEditor toAdd) {
+		private void updateSinState(SubtitleEditor toAdd) {
 			if(sins.contains(toAdd.key)) {
 				sins.get(toAdd.key).state = toAdd.state.state();
 			}
@@ -512,7 +512,7 @@ public class SinEditorPanel extends JMPanel {
 		 * The method by which a SinEditor is deleted.
 		 * @param toDelete the sinEditor to be deleted
 		 */
-		private void deleteAction(SinEditor toDelete) {
+		private void deleteAction(SubtitleEditor toDelete) {
 			undoStack.add(toDelete);
 
 			sinEditors.remove(toDelete.key);
@@ -570,7 +570,7 @@ public class SinEditorPanel extends JMPanel {
 			for(int x = 0; x <= 9; x++) {
 				String time2 = destination + "\\" + make2Digit(x) + "-" + 
 						make2Digit(x);
-				new SubtitleExporter(x + "", time2);
+				new SubtitleOverlayExporter(x + "", time2);
 			}
 		}
 		
@@ -579,14 +579,14 @@ public class SinEditorPanel extends JMPanel {
 		 */
 		public void undo() {
 			if(editorPanel.undoStack.size() > 0) {
-				if(editorPanel.undoStack.peek() instanceof SinEditor) {
-					Sin s = ((SinEditor) editorPanel.undoStack.pop()).getSin();
+				if(editorPanel.undoStack.peek() instanceof SubtitleEditor) {
+					Subtitle s = ((SubtitleEditor) editorPanel.undoStack.pop()).getSin();
 					addNewSin(s, true);
 					sinEditors.get(s.key).text.requestFocus();	
 
 					editorPanel.redoStack.add(s);
-				} else if(editorPanel.undoStack.peek() instanceof Sin) {
-					Sin s = ((Sin) editorPanel.undoStack.pop());
+				} else if(editorPanel.undoStack.peek() instanceof Subtitle) {
+					Subtitle s = ((Subtitle) editorPanel.undoStack.pop());
 					addNewSin(s, true);
 					sinEditors.get(s.key).text.requestFocus();	
 
@@ -619,8 +619,8 @@ public class SinEditorPanel extends JMPanel {
 		 */
 		public void redo() {
 			if(redoStack.size() > 0) {
-				if(redoStack.peek() instanceof Sin) {
-					Sin s = ((Sin) redoStack.pop());				
+				if(redoStack.peek() instanceof Subtitle) {
+					Subtitle s = ((Subtitle) redoStack.pop());				
 
 					sins.remove(s.key);
 

@@ -23,7 +23,7 @@ public class SearchPanel extends RoundedPanel {
 	private static final long serialVersionUID = -5908127450981918010L;
 
 	public JMTextField  text  = new JMTextField("");
-	public SinEditorButton removeFromView = new SinEditorButton(FancyIcon.DELETE_16x16);
+	public SubtitleEditorButton removeFromView = new SubtitleEditorButton(FancyIcon.DELETE_16x16);
 
 	public SearchPanel() {
 		background = Variables.BACKGROUND;
@@ -114,8 +114,8 @@ public class SearchPanel extends RoundedPanel {
 				((JMDivider) c).addMouseClickedListener(e -> text.requestFocus());
 			}
 
-			if(c instanceof SinEditorButton) {
-				((SinEditorButton) c).addActionListener(e -> {
+			if(c instanceof SubtitleEditorButton) {
+				((SubtitleEditorButton) c).addActionListener(e -> {
 					text.requestFocus();
 				});
 			}

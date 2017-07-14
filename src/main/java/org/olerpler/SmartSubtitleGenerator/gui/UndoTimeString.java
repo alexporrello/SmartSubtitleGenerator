@@ -7,7 +7,7 @@ public class UndoTimeString {
 	public Double key;
 	public UndoTime time;
 
-	public UndoTimeString(SinEditor se, UndoTime time) {
+	public UndoTimeString(SubtitleEditor se, UndoTime time) {
 		this.time = time;
 		this.key  = se.key;
 

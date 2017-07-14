@@ -1,4 +1,4 @@
-package org.olerpler.SmartSubtitleGenerator.subtitle;
+package org.olerpler.SmartSubtitleGenerator.subtitleOverlay;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -13,14 +13,14 @@ import text.Word;
 import displays.JMPanel;
 import displays.JMUtils;
 
-public class SubtitleExporter extends JMPanel {
+public class SubtitleOverlayExporter extends JMPanel {
 	private static final long serialVersionUID = 389010027836038676L;
 
 	/** The sin number for this subtitle **/
 	private int sinNumber;
 
 	/** The subtitle currently being painted **/
-	private Subtitle toPaint;
+	private SubtitleOverlay toPaint;
 
 	/** The subtitle's background color **/
 	private Color background = Color.BLACK;
@@ -58,7 +58,7 @@ public class SubtitleExporter extends JMPanel {
 	 * @param sinEditor if the user is using program to write a sins script
 	 *        instead of a wins script.
 	 */
-	public SubtitleExporter(String s, int sinNumber, boolean empty, String exportPath,
+	public SubtitleOverlayExporter(String s, int sinNumber, boolean empty, String exportPath,
 			boolean sinsEditor) {
 
 		this.sinsEditor = sinsEditor;
@@ -71,7 +71,7 @@ public class SubtitleExporter extends JMPanel {
 
 		if(!empty) i = 1;
 
-		for(Subtitle subtitle : Subtitle.processSubtitle(s)) {
+		for(SubtitleOverlay subtitle : SubtitleOverlay.processSubtitle(s)) {
 			toPaint = subtitle;
 
 			revalidate();
@@ -87,14 +87,14 @@ public class SubtitleExporter extends JMPanel {
 	 * @param time the time to be exported.
 	 * @param exportPath the location where the time is saved.
 	 */
-	public SubtitleExporter(String time, String exportPath) {
+	public SubtitleOverlayExporter(String time, String exportPath) {
 
 		JMUtils.setFixedSize(this, 1280, 720);
 
 		this.sinNumber = 0;
 		this.time = time;
 
-		for(Subtitle subtitle : Subtitle.processSubtitle(" ")) {
+		for(SubtitleOverlay subtitle : SubtitleOverlay.processSubtitle(" ")) {
 			toPaint = subtitle;
 
 			revalidate();
@@ -131,36 +131,36 @@ public class SubtitleExporter extends JMPanel {
 
 		gg.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
 				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		gg.setFont(Subtitle.FONT);
+		gg.setFont(SubtitleOverlay.FONT);
 
-		int sub = 720-Subtitle.SUBTITLE_HEIGHT;		
+		int sub = 720-SubtitleOverlay.SUBTITLE_HEIGHT;		
 
 		gg.setColor(background);
 		gg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, overlayOpacity));
-		gg.fillRect(5, 5 + sub, Subtitle.SUBTITLE_WIDTH-10, Subtitle.SUBTITLE_HEIGHT-10);
+		gg.fillRect(5, 5 + sub, SubtitleOverlay.SUBTITLE_WIDTH-10, SubtitleOverlay.SUBTITLE_HEIGHT-10);
 
 		gg.setComposite(AlphaComposite.Src);
 		gg.setColor(foreground);
 
 		if(toPaint.isSingleLine()) {
-			Word w = new Word(toPaint.middle, Subtitle.FONT);
+			Word w = new Word(toPaint.middle, SubtitleOverlay.FONT);
 
-			int x = (Subtitle.SUBTITLE_WIDTH - w.width) / 2;
-			int y = (Subtitle.SUBTITLE_HEIGHT) /2 + sub;
+			int x = (SubtitleOverlay.SUBTITLE_WIDTH - w.width) / 2;
+			int y = (SubtitleOverlay.SUBTITLE_HEIGHT) /2 + sub;
 
 			gg.drawString(w.word, x, y+5);
 		} else {
-			Word top = new Word(toPaint.top, Subtitle.FONT);
-			Word bot = new Word(toPaint.bottom, Subtitle.FONT);
+			Word top = new Word(toPaint.top, SubtitleOverlay.FONT);
+			Word bot = new Word(toPaint.bottom, SubtitleOverlay.FONT);
 
-			int tWidth = g.getFontMetrics(Subtitle.FONT).stringWidth(toPaint.top);
-			int bWidth = g.getFontMetrics(Subtitle.FONT).stringWidth(toPaint.bottom);
+			int tWidth = g.getFontMetrics(SubtitleOverlay.FONT).stringWidth(toPaint.top);
+			int bWidth = g.getFontMetrics(SubtitleOverlay.FONT).stringWidth(toPaint.bottom);
 
-			int topX = (Subtitle.SUBTITLE_WIDTH - tWidth) / 2;
-			int botX = (Subtitle.SUBTITLE_WIDTH - bWidth) / 2;
+			int topX = (SubtitleOverlay.SUBTITLE_WIDTH - tWidth) / 2;
+			int botX = (SubtitleOverlay.SUBTITLE_WIDTH - bWidth) / 2;
 
-			int topY = (Subtitle.SUBTITLE_HEIGHT - bot.height) / 2   + sub;
-			int botY = (Subtitle.SUBTITLE_HEIGHT + (bot.height)) / 2 + sub + 5;
+			int topY = (SubtitleOverlay.SUBTITLE_HEIGHT - bot.height) / 2   + sub;
+			int botY = (SubtitleOverlay.SUBTITLE_HEIGHT + (bot.height)) / 2 + sub + 5;
 
 			gg.drawString(top.word, topX, topY+5);
 			gg.drawString(bot.word, botX, botY+5);
@@ -196,7 +196,7 @@ public class SubtitleExporter extends JMPanel {
 		gg.setColor(foreground);
 
 		// Create the font for overlayText.
-		Font overlayTextFont = new Font(Subtitle.FONT.getName(), Font.PLAIN, 35);
+		Font overlayTextFont = new Font(SubtitleOverlay.FONT.getName(), Font.PLAIN, 35);
 
 		// Position and draw the overlay text.
 		gg.setFont(overlayTextFont);
@@ -206,9 +206,9 @@ public class SubtitleExporter extends JMPanel {
 		gg.drawString(text, textX, 43);
 
 		// Position and draw the overlay title.
-		gg.setFont(Subtitle.FONT);
+		gg.setFont(SubtitleOverlay.FONT);
 		int titleWidth = 
-				gg.getFontMetrics(Subtitle.FONT).stringWidth(overlayTitle);
+				gg.getFontMetrics(SubtitleOverlay.FONT).stringWidth(overlayTitle);
 		int titleX = ((276 - titleWidth)/2)+overlayX;
 		gg.drawString(overlayTitle, titleX, 70);
 	}

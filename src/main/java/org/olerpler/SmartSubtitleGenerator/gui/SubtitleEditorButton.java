@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 
 import text.JMLabel;
 
-public class SinEditorButton extends JMLabel {
+public class SubtitleEditorButton extends JMLabel {
 	private static final long serialVersionUID = 8053269937583104140L;
 
 	private Color oval = Variables.MOUSE_OFF;
@@ -20,7 +20,7 @@ public class SinEditorButton extends JMLabel {
 	public Color mouse_over = Variables.MOUSE_OVER;
 	public Color mouse_off  = Variables.MOUSE_OFF;
 	
-	public SinEditorButton(ImageIcon icon) {
+	public SubtitleEditorButton(ImageIcon icon) {
 		setOpaque(false);
 		setIcon(icon);
 		
